@@ -1,5 +1,6 @@
 package io.github.jhipster.sample;
 
+import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.sample.config.ApplicationProperties;
 import io.github.jhipster.sample.config.DefaultProfileUtil;
 
@@ -12,14 +13,22 @@ import org.springframework.boot.actuate.autoconfigure.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static springfox.documentation.builders.PathSelectors.regex;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
@@ -52,6 +61,34 @@ public class JhipsterCassandraSampleApplicationApp {
             log.error("You have misconfigured your application! It should not" +
                 "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
+    }
+
+    @Bean
+    public Docket testDocket(JHipsterProperties jHipsterProperties) {
+        Contact contact = new Contact(
+            jHipsterProperties.getSwagger().getContactName(),
+            jHipsterProperties.getSwagger().getContactUrl(),
+            jHipsterProperties.getSwagger().getContactEmail());
+
+        ApiInfo apiInfo = new ApiInfo(
+            jHipsterProperties.getSwagger().getTitle(),
+            jHipsterProperties.getSwagger().getDescription(),
+            jHipsterProperties.getSwagger().getVersion(),
+            jHipsterProperties.getSwagger().getTermsOfServiceUrl(),
+            contact,
+            jHipsterProperties.getSwagger().getLicense(),
+            jHipsterProperties.getSwagger().getLicenseUrl());
+
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+            .apiInfo(apiInfo)
+            .groupName("test")
+            .forCodeGeneration(true)
+            .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
+            .genericModelSubstitutes(ResponseEntity.class)
+            .select()
+            .paths(regex(jHipsterProperties.getSwagger().getDefaultIncludePattern()))
+            .build();
+        return docket;
     }
 
     /**

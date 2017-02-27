@@ -1,0 +1,16 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "bar",
+            "fieldType": "ByteBuffer",
+            "fieldTypeBlobContent": "image"
+        }
+    ],
+    "changelogDate": "20170227131642",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "foo",
+    "pagination": "no"
+}

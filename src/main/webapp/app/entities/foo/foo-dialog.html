@@ -1,0 +1,48 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myFooLabel" data-translate="jhipsterCassandraSampleApplicationApp.foo.home.createOrEditLabel">Create or edit a Foo</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.foo.id">
+            <label for="id" data-translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.foo.id" readonly />
+        </div>
+        <div class="form-group" ngf-drop ngf-change="vm.setBar($file, vm.foo)" ngf-pattern="'image/*'">
+            <label class="control-label" data-translate="jhipsterCassandraSampleApplicationApp.foo.bar" for="field_bar">Bar</label>
+            <div>
+                <img data-ng-src="{{'data:' + vm.foo.barContentType + ';base64,' + vm.foo.bar}}" style="max-height: 100px;" ng-if="vm.foo.bar" alt="foo image"/>
+                <div ng-if="vm.foo.bar" class="help-block clearfix">
+                    <span class="pull-left">{{vm.foo.barContentType}}, {{vm.byteSize(vm.foo.bar)}}</span>
+                    <button type="button" ng-click="vm.foo.bar=null;vm.foo.barContentType=null;"
+                            class="btn btn-default btn-xs pull-right">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+                <button type="button" ngf-select class="btn btn-default btn-block"
+                        ngf-change="vm.setBar($file, vm.foo)" accept="image/*" data-translate="entity.action.addimage">
+                    Add image
+                </button>
+            </div>
+            <input type="hidden" class="form-control" name="bar" id="field_bar"
+                    ng-model="vm.foo.bar"
+                    />
+            <input type="hidden" class="form-control" name="barContentType" id="field_barContentType"
+                    ng-model="vm.foo.barContentType" />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

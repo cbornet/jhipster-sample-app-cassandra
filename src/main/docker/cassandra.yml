@@ -10,9 +10,14 @@ services:
             - 7199:7199
             - 9042:9042
             - 9160:9160
+        environment:
+            - MAX_HEAP_SIZE=256M
+            - HEAP_NEWSIZE=128M
     jhipstercassandrasampleapplication-cassandra-migration:
         extends:
             file: cassandra-migration.yml
             service: jhipstercassandrasampleapplication-cassandra-migration
         environment:
             - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql
+            - MAX_HEAP_SIZE=256M
+            - HEAP_NEWSIZE=128M
